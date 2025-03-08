@@ -1,4 +1,4 @@
-# ouroboros
+# Ouroboros
 
 Use Ouroboros to easily consume JSON:API document objects in a JavaScript project.
 
@@ -87,3 +87,16 @@ console.log(author === commenter); // true
   }]
 }
 ```
+
+### TODO
+
+- [] Refactor Deno tests into a node.js compatible test framework.
+- [] Add a `package.json` file
+- [] Publish a bundled ES module
+- [] Elide the `data` relationship object member
+- [] Author a simple [JSON:API profile][profiles] restricting the use of `data`, `relationship` (singular), `links`, or `meta` as an attribute or relationship field name.
+- [] Add GitHub workflows
+- [] Handle documents with a primary data array
+- [] Refactor the way links are treated to be less unwieldy
+
+[profiles]: https://jsonapi.org/extensions/#existing-profiles
