@@ -1,10 +1,8 @@
 # Ouroboros
 
-Use Ouroboros to easily consume JSON:API document objects in a JavaScript project.
+Ouroboros decouples your presentation logic from the intricacies of the JSON:API document structure by transforming a complex JSON:API document object into a simplified object with easy-to-access properties.
 
-Ouroboros transforms a complex JSON:API document object into a simplified object with easy-to-access properties and decouples your presentation logic from the intricacies of the JSON:API document structure.
-
-For example, notice that the code below doesn't need to repetitively access the `data.attributes` property or know the difference between `attributes` and `relationships` fields; nor does is it need to search for the `people` object in the `included` array—Ouroboros does that transparently.
+For example, notice that the code below doesn't need to repetitively access the `data.attributes` property or know the difference between `attributes` and `relationships` fields—nor does is it need to search for the `people` object in the `included` array—Ouroboros does it transparently.
 
 ```js
 const doc = JSON.parse({/* shown below */});
