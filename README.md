@@ -67,6 +67,17 @@ console.log(author === commenter); // true
     },
     "links": {
       "self": "http://example.com/people/9"
+    },
+    "relationships": {
+      "comments": {
+        "links": {
+          "self": "http://example.com/people/9/relationships/comments",
+          "related": "http://example.com/people/9/comments"
+        },
+        "data": [
+          { "type": "comments", "id": "5" }
+        ]
+      }
     }
   }, {
     "type": "comments",
@@ -84,6 +95,32 @@ console.log(author === commenter); // true
     }
   }]
 }
+```
+
+#### Why "ouroboros"?
+
+Consuming a JSON:API document with a circular relationship causes Ouroboros to loop back on itself (without breaking).
+
+For example, using the example above, the following code works without a problem:
+
+```js
+const doc = JSON.parse({/* shown above */});
+
+const { author } = parse(doc);
+
+console.log(
+  author.data
+  .comments.data[0]
+  .author.data
+  .comments.data[0]
+  // ∞
+  .author.data
+  .comments.data[0]
+  .body
+);
+
+// Prints…
+// First!
 ```
 
 ### TODO
