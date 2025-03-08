@@ -97,7 +97,7 @@ console.log(author === commenter); // true
 }
 ```
 
-#### Why "ouroboros"?
+#### Why _Ouroboros_?
 
 Consuming a JSON:API document with a circular relationship causes Ouroboros to loop back on itself (without breaking).
 
