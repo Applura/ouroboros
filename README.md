@@ -2,6 +2,21 @@
 
 Ouroboros decouples your presentation logic from the intricacies of the JSON:API document structure by transforming a complex JSON:API document object into a simplified object with easy-to-access properties.
 
+### TODO
+
+- [ ] Refactor Deno tests into a node.js compatible test framework.
+- [ ] Add a `package.json` file
+- [ ] Publish a bundled ES module
+- [ ] Elide the `data` relationship object member
+- [ ] Author a simple [JSON:API profile][profiles] restricting the use of `data`, `relationship` (singular), `links`, or `meta` as an attribute or relationship field name.
+- [ ] Add GitHub workflows
+- [ ] Handle documents with a primary data array
+- [ ] Refactor the way links are treated to be less unwieldy
+
+[profiles]: https://jsonapi.org/extensions/#existing-profiles
+
+### Example
+
 For example, notice that the code below doesn't need to repetitively access the `data.attributes` property or know the difference between `attributes` and `relationships` fields—nor does is it need to search for the `people` object in the `included` array—Ouroboros does it transparently.
 
 ```js
@@ -13,10 +28,8 @@ const comments = article.comments.data;
 
 console.log(`"${article.title}" by ${author.firstName} ${author.lastName}`);
 
-for (const {
-  body,
-  author: commenter,
-} of comments) {
+for (const comment of comments) {
+  const {body, author: {data: commenter}} = comment;
   console.log(`-- ${commenter.firstName} commented: "${body}"`);
 }
 
@@ -122,16 +135,3 @@ console.log(
 // Prints…
 // First!
 ```
-
-### TODO
-
-- [ ] Refactor Deno tests into a node.js compatible test framework.
-- [ ] Add a `package.json` file
-- [ ] Publish a bundled ES module
-- [ ] Elide the `data` relationship object member
-- [ ] Author a simple [JSON:API profile][profiles] restricting the use of `data`, `relationship` (singular), `links`, or `meta` as an attribute or relationship field name.
-- [ ] Add GitHub workflows
-- [ ] Handle documents with a primary data array
-- [ ] Refactor the way links are treated to be less unwieldy
-
-[profiles]: https://jsonapi.org/extensions/#existing-profiles
