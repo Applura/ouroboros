@@ -75,7 +75,7 @@ function Links(obj) {
       let i = 0;
       return {
         next: function () {
-          return (i++ < links.length) ? { value: links[i] } : { done: true };
+          return i++ < links.length ? { value: links[i] } : { done: true };
         },
       };
     },

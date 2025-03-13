@@ -64,49 +64,48 @@ console.log(author === commenter); // true
           "self": "http://example.com/articles/1/relationships/comments",
           "related": "http://example.com/articles/1/comments"
         },
-        "data": [
-          { "type": "comments", "id": "5" }
-        ]
+        "data": [{ "type": "comments", "id": "5" }]
       }
     }
   },
-  "included": [{
-    "type": "people",
-    "id": "9",
-    "attributes": {
-      "firstName": "Dan",
-      "lastName": "Gebhardt",
-      "twitter": "dgeb"
-    },
-    "links": {
-      "self": "http://example.com/people/9"
-    },
-    "relationships": {
-      "comments": {
-        "links": {
-          "self": "http://example.com/people/9/relationships/comments",
-          "related": "http://example.com/people/9/comments"
-        },
-        "data": [
-          { "type": "comments", "id": "5" }
-        ]
-      }
-    }
-  }, {
-    "type": "comments",
-    "id": "5",
-    "attributes": {
-      "body": "First!"
-    },
-    "relationships": {
-      "author": {
-        "data": { "type": "people", "id": "2" }
+  "included": [
+    {
+      "type": "people",
+      "id": "9",
+      "attributes": {
+        "firstName": "Dan",
+        "lastName": "Gebhardt",
+        "twitter": "dgeb"
+      },
+      "links": {
+        "self": "http://example.com/people/9"
+      },
+      "relationships": {
+        "comments": {
+          "links": {
+            "self": "http://example.com/people/9/relationships/comments",
+            "related": "http://example.com/people/9/comments"
+          },
+          "data": [{ "type": "comments", "id": "5" }]
+        }
       }
     },
-    "links": {
-      "self": "http://example.com/comments/5"
+    {
+      "type": "comments",
+      "id": "5",
+      "attributes": {
+        "body": "First!"
+      },
+      "relationships": {
+        "author": {
+          "data": { "type": "people", "id": "2" }
+        }
+      },
+      "links": {
+        "self": "http://example.com/comments/5"
+      }
     }
-  }]
+  ]
 }
 ```
 
