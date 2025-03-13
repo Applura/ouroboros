@@ -4,7 +4,7 @@ Ouroboros decouples your presentation logic from the intricacies of the JSON:API
 
 ### TODO
 
-- [ ] Refactor Deno tests into a node.js compatible test framework.
+- [x] Refactor Deno tests into a node.js compatible test framework.
 - [x] Add a `package.json` file
 - [ ] Publish a bundled ES module
 - [ ] Elide the `data` relationship object member
