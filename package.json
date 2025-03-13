@@ -1,0 +1,22 @@
+{
+  "name": "@applura/ouroboros",
+  "version": "0.0.0",
+  "description": "Easily read JSON:API resource object and included object attributes",
+  "module": "dist/ouroboros.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/applura/ouroboros.git"
+  },
+  "author": "Applura, Inc",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/applura/ouroboros/issues"
+  },
+  "homepage": "https://github.com/applura/ouroboros#readme",
+  "devDependencies": {
+    "rollup": "^4.35.0"
+  }
+}

@@ -5,7 +5,7 @@ Ouroboros decouples your presentation logic from the intricacies of the JSON:API
 ### TODO
 
 - [ ] Refactor Deno tests into a node.js compatible test framework.
-- [ ] Add a `package.json` file
+- [x] Add a `package.json` file
 - [ ] Publish a bundled ES module
 - [ ] Elide the `data` relationship object member
 - [ ] Author a simple [JSON:API profile][profiles] restricting the use of `data`, `relationship` (singular), `links`, or `meta` as an attribute or relationship field name.

@@ -8,7 +8,7 @@ export class LibraryError extends Error {
 
 // Raised when the implementation of this library has caused an error. For example, when a known edge case has not been
 // handled.
-export class ImplementationError extends Error {
+export class ImplementationError extends LibraryError {
   constructor(message, options) {
     super(message, options);
     this.name = "ImplementationError";

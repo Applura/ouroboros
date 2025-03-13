@@ -1,15 +1,4 @@
-import { UsageError } from "./errors.js";
-
-export default function parse(doc) {
-  if (!("data" in doc)) {
-    throw new UsageError(
-      "the parse function only supports JSON:API documents with primary data",
-    );
-  }
-  return (new Doc(doc)).primary;
-}
-
-function Doc(obj) {
+export default function Doc(obj) {
   if ("data" in obj) {
     Object.defineProperty(this, "resources", { value: new Map() });
     Object.defineProperty(this, "primary", {
