@@ -1,10 +1,12 @@
 {
   "name": "@applura/ouroboros",
   "version": "0.0.0",
+  "type": "module",
   "description": "Easily read JSON:API resource object and included object attributes",
   "module": "dist/ouroboros.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "lint": "npx eslint src"
   },
   "repository": {
     "type": "git",
@@ -17,6 +19,9 @@
   },
   "homepage": "https://github.com/applura/ouroboros#readme",
   "devDependencies": {
+    "@eslint/js": "^9.22.0",
+    "eslint": "^9.22.0",
+    "globals": "^16.0.0",
     "rollup": "^4.35.0"
   }
 }
