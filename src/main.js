@@ -1,5 +1,5 @@
 import { UsageError } from "./errors.js";
-import Doc from "./document.js";
+import Ouroboros from "./object.js";
 
 /**
  * {@link parse} is a convenience method that wraps {@link consume}, but can be called with an unparsed JSON string.
@@ -39,5 +39,5 @@ export function consume(doc) {
       "JSON:API documents without primary data are not supported",
     );
   }
-  return new Doc(doc).primary;
+  return new Ouroboros(doc).primary;
 }

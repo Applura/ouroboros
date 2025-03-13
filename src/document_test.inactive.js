@@ -4,16 +4,8 @@
  * THESE TESTS ARE NOT ACTIVE.
  */
 
-import parse from "./document.js";
-import {
-  assertEquals,
-  assertThrows,
-} from "https://deno.land/std@0.203.0/assert/mod.ts";
-import { UsageError } from "./errors.js";
-
-Deno.test("parse: usage error", () => {
-  assertThrows(() => parse({}), UsageError);
-});
+import { parse } from "./main.js";
+import { assertEquals } from "https://deno.land/std@0.203.0/assert/mod.ts";
 
 Deno.test("parse: attribute destructuring", () => {
   const { foo } = parse({

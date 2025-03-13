@@ -1,4 +1,4 @@
-export default function Doc(obj) {
+export default function Ouroboros(obj) {
   if ("data" in obj) {
     Object.defineProperty(this, "resources", { value: new Map() });
     Object.defineProperty(this, "primary", {
