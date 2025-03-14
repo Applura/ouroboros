@@ -20,6 +20,26 @@ easy-to-access properties.
 
 [profiles]: https://jsonapi.org/extensions/#existing-profiles
 
+### API
+
+Ouroboros exports two mutually-exclusive functions: `parse` and `consume`. Use
+`parse` if you have a raw JSON:API string. Use `consume` if your JSON object has
+already been parsed with `JSON.parse()`.
+
+```js
+import { parse, consume } from "@applura/ouroboros";
+
+// If you have raw JSON, use parse.
+const json = "{/* example shown below */}";
+const parsedArticle = parse(json);
+
+// If you have a parsed object, use consume.
+const doc = JSON.parse(json);
+const consumedArticle = consume(doc);
+
+console.log(parsedArticle.title === consumedArticle.title); // true.
+```
+
 ### Example
 
 For example, notice that the code below doesn't need to repetitively access the

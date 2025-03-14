@@ -129,5 +129,14 @@ describe("readme example", () => {
       );
       expect(author === commenter).toBe(true);
     }
+
+    // If you have raw JSON, use parse.
+    const parsedArticle = parse(exampleJSON);
+
+    // If you have a parsed object, use consume.
+    const doc = JSON.parse(exampleJSON);
+    const consumedArticle = consume(doc);
+
+    expect(parsedArticle.title === consumedArticle.title).toBe(true);
   });
 });
