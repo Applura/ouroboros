@@ -77,7 +77,11 @@ for (const comment of comments) {
       "title": "JSON:API paints my bikeshed!"
     },
     "links": {
+      "describedby": "http://example.com/schemas/article-resource",
       "self": "http://example.com/articles/1"
+    },
+    "meta": {
+      "description": "A single article."
     },
     "relationships": {
       "author": {
@@ -97,7 +101,7 @@ for (const comment of comments) {
     }
   },
   "links": {
-    "describedby": "http://example.com/schemas/articles"
+    "describedby": "http://example.com/schemas/article-document"
   },
   "meta": {
     "description": "Document containing a single article and its related resources."
@@ -185,9 +189,13 @@ parent resource object.
 const article = parse(/* example shown above */)
 const { author } = article;
 
+// To access a resource object's links or meta members, access them directly.
+console.log(article.links.describedby); // "http://example.com/schemas/article-resource"
+console.log(article.meta.description); // "A single article."
+
 // To access a top-level links or meta member, use the "base" property on any
 // resource.
-console.log(article.base.links.describedby); // "http://example.com/schemas/articles"
+console.log(article.base.links.describedby); // "http://example.com/schemas/article-document"
 console.log(article.base.meta.description); // "Document containing a single article and its related resources."
 
 // Article and author share the same "base" property.
