@@ -213,4 +213,85 @@ describe("Ouroboros object", () => {
         .comments[0].body,
     ).toBe("First!");
   });
+
+  test("links and metadata", () => {
+    const item = consume({
+      data: {
+        type: "item",
+        id: "1",
+        attributes: {
+          title: "Title field",
+        },
+        relationships: {
+          author: {
+            data: {
+              type: "person",
+              id: "1",
+            },
+            links: {
+              related: "/items/1/author",
+            },
+            meta: {
+              description: "This relates the item to its author.",
+            },
+          },
+        },
+        links: {
+          self: {
+            href: "/items/1",
+          },
+        },
+        meta: {
+          description: "This is a resource object representing an item.",
+        },
+      },
+      included: [
+        {
+          type: "person",
+          id: "1",
+          attributes: {
+            name: "Jean Dot",
+          },
+          links: {
+            self: {
+              href: "/people/1",
+            },
+          },
+          meta: {
+            description: "This is a resource object representing a person.",
+          },
+        },
+      ],
+      links: {
+        self: {
+          href: "https://example.com/items/1",
+        },
+      },
+      meta: {
+        description: "This is a top-level document object.",
+      },
+    });
+    expect(item.links.self.href).toBe("/items/1");
+    expect(item.meta.description).toBe(
+      "This is a resource object representing an item.",
+    );
+    expect(item.base.links.self.href).toBe("https://example.com/items/1");
+    expect(item.base.meta.description).toBe(
+      "This is a top-level document object.",
+    );
+    expect(item.author.links.self.href).toBe("/people/1");
+    expect(item.author.meta.description).toBe(
+      "This is a resource object representing a person.",
+    );
+    expect(item.author.base.links.self.href).toBe(
+      "https://example.com/items/1",
+    );
+    expect(item.author.base.meta.description).toBe(
+      "This is a top-level document object.",
+    );
+    expect(item.relationships.author.links.related).toBe("/items/1/author");
+    expect(item.relationships.author.meta.description).toBe(
+      "This relates the item to its author.",
+    );
+  });
 });

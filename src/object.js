@@ -1,5 +1,6 @@
 import { UsageError } from "./errors.js";
 
+const reservedNames = ["type", "id", "relationships", "meta", "links", "base"];
 /**
  * Container for a JSON:API document which makes it easy to read JSON:API resource object attributes.
  *
@@ -9,6 +10,18 @@ import { UsageError } from "./errors.js";
  * @property {Resource} primary
  */
 export default function Ouroboros(obj) {
+  if ("links" in obj) {
+    Object.defineProperty(this, "links", {
+      value: obj.links,
+      enumerable: true,
+    });
+  }
+  if ("meta" in obj) {
+    Object.defineProperty(this, "meta", {
+      value: obj.meta,
+      enumerable: true,
+    });
+  }
   if ("data" in obj) {
     Object.defineProperty(this, "resources", { value: new Map() });
     Object.defineProperty(this, "primary", {
@@ -51,9 +64,7 @@ function Resource(obj, doc) {
   });
   if ("attributes" in obj) {
     for (const attribute in obj.attributes) {
-      if (
-        ["type", "id", "relationships", "meta", "links"].includes(attribute)
-      ) {
+      if (reservedNames.includes(attribute)) {
         throw new UsageError(
           `resource objects must not have an attribute member named: ${attribute}`,
         );
@@ -95,6 +106,31 @@ function Resource(obj, doc) {
   if ("links" in obj) {
     Object.defineProperty(this, "links", {
       value: obj.links,
+      enumerable: true,
+    });
+  }
+  if ("meta" in obj) {
+    Object.defineProperty(this, "meta", {
+      value: obj.meta,
+      enumerable: true,
+    });
+  }
+  if ("links" in doc || "meta" in doc) {
+    const base = {};
+    if ("links" in doc) {
+      Object.defineProperty(base, "links", {
+        get: () => doc.links,
+        enumerable: true,
+      });
+    }
+    if ("meta" in doc) {
+      Object.defineProperty(base, "meta", {
+        get: () => doc.meta,
+        enumerable: true,
+      });
+    }
+    Object.defineProperty(this, "base", {
+      value: base,
       enumerable: true,
     });
   }

@@ -12,7 +12,7 @@ easy-to-access properties.
 - [ ] Publish a bundled ES module
 - [x] Elide the `data` relationship object member
 - [ ] Author a simple [JSON:API profile][profiles] restricting the use of
-  `type`, `id`, `relationships`, `links`, or `meta` as an attribute or
+  `type`, `id`, `relationships`, `links`, `meta`, or `base` as an attribute or
   relationship field name.
 - [x] Add GitHub workflows
 - [ ] Handle documents with a primary data array
@@ -92,6 +92,12 @@ for (const comment of comments) {
       }
     }
   },
+  "links": {
+    "describedby": "http://example.com/schemas/articles"
+  },
+  "meta": {
+    "description": "Document containing a single article and its related resources."
+  },
   "included": [
     {
       "type": "people",
@@ -142,7 +148,7 @@ For example, using the example above, the following code works as one would
 expect:
 
 ```js
-const { author } = parse(/* shown above */);
+const { author } = parse(/* example shown above */);
 
 console.log(
   author
@@ -159,7 +165,48 @@ console.log(
 // First!
 ```
 
-[spec]: https://jsonapi.org/format/
-[structure]: https://jsonapi.org/format/#document-structure
+#### What about links and metadata?
+
+All `links` and `meta` members in the document are preserved.
+
+To access `links` or `meta` object members from the
+original [top-level object][top-level], use the `base` property.
+
+To access `links` or `meta` object members from one of the original
+[relationship objects][relationships], use the `relationships` property on the
+parent resource object.
+
+```js
+const article = parse(/* example shown above */)
+const { author } = article;
+
+// To access a top-level links or meta member, use the base property on any
+// resource:
+console.log(article.base.links.describedby); // "http://example.com/schemas/articles"
+console.log(article.base.meta.description); // "Document containing a single article and its related resources."
+console.log(author.base.links.describedby); // "http://example.com/schemas/articles"
+console.log(author.base.meta.description); // "Document containing a single article and its related resources."
+
+// To access a links or meta member on a relationship, use the relationships
+// property on the context resource object *not* the related resource object:
+console.log(article.relationships.author.links.related); // "http://example.com/articles/1/author"
+```
+
+#### Limitations
+
+Resource objects must not have any attributes or relationships with any of the
+following names:
+
+- `type`
+- `id`
+- `relationships`
+- `meta`
+- `links`
+- `base`
+
 [fields]: https://jsonapi.org/format/#document-resource-object-fields
 [included]: https://jsonapi.org/format/#document-compound-documents
+[relationships]: https://jsonapi.org/format/#document-resource-object-relationships
+[spec]: https://jsonapi.org/format/
+[structure]: https://jsonapi.org/format/#document-structure
+[top-level]: https://jsonapi.org/format/#document-top-level
