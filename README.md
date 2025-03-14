@@ -185,14 +185,17 @@ const article = parse(/* example shown above */)
 const { author } = article;
 
 // To access a top-level links or meta member, use the base property on any
-// resource:
+// resource.
 console.log(article.base.links.describedby); // "http://example.com/schemas/articles"
 console.log(article.base.meta.description); // "Document containing a single article and its related resources."
-console.log(author.base.links.describedby); // "http://example.com/schemas/articles"
-console.log(author.base.meta.description); // "Document containing a single article and its related resources."
+
+// Article and author share the same base property.
+console.log(article.base.links.describedby === author.base.links.describedby); // true.
+console.log(article.base.meta.description === author.base.meta.description); // true.
 
 // To access a links or meta member on a relationship, use the relationships
-// property on the context resource object *not* the related resource object:
+// property on the parent resource object *not* the related resource object. In
+// this example, article is the parent because it has a relationship to author.
 console.log(article.relationships.author.links.related); // "http://example.com/articles/1/author"
 ```
 
