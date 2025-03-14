@@ -21,7 +21,7 @@ export function parse(json) {
 }
 
 /**
- * {@link consume} instantiates a new
+ * {@link consume} instantiates a new Ouroboros object and returns doc's primary resource.
  *
  * @param {data: object} doc
  *
