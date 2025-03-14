@@ -146,7 +146,8 @@ for (const comment of comments) {
 #### Why _Ouroboros_?
 
 Consuming a JSON:API document with a circular relationship causes Ouroboros to
-loop back on itself without breaking.
+loop back on itself without breaking, like the [ancient symbol][serpent]
+depicting a serpent consuming its own tail.
 
 For example, using the example above, the following code works as one would
 expect:
@@ -184,16 +185,16 @@ parent resource object.
 const article = parse(/* example shown above */)
 const { author } = article;
 
-// To access a top-level links or meta member, use the base property on any
+// To access a top-level links or meta member, use the "base" property on any
 // resource.
 console.log(article.base.links.describedby); // "http://example.com/schemas/articles"
 console.log(article.base.meta.description); // "Document containing a single article and its related resources."
 
-// Article and author share the same base property.
+// Article and author share the same "base" property.
 console.log(article.base.links.describedby === author.base.links.describedby); // true.
 console.log(article.base.meta.description === author.base.meta.description); // true.
 
-// To access a links or meta member on a relationship, use the relationships
+// To access a links or meta member on a relationship, use the "relationships"
 // property on the parent resource object *not* the related resource object. In
 // this example, article is the parent because it has a relationship to author.
 console.log(article.relationships.author.links.related); // "http://example.com/articles/1/author"
@@ -201,7 +202,7 @@ console.log(article.relationships.author.links.related); // "http://example.com/
 
 #### Limitations
 
-Resource objects must not have any attributes or relationships with any of the
+Resource objects must not have any attribute or relationship fields with any of the
 following names:
 
 - `type`
@@ -211,6 +212,7 @@ following names:
 - `links`
 - `base`
 
+[serpent]: https://en.m.wikipedia.org/wiki/Ouroboros
 [fetch]: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API
 [fields]: https://jsonapi.org/format/#document-resource-object-fields
 [included]: https://jsonapi.org/format/#document-compound-documents
