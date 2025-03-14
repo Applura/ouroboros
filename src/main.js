@@ -1,5 +1,6 @@
 import { UsageError } from "./errors.js";
 import Ouroboros from "./object.js";
+import { isConventionalObject } from "./utilities.js";
 
 /**
  * {@link parse} is a convenience method that wraps {@link consume}, but can be called with an unparsed JSON string.
@@ -7,7 +8,7 @@ import Ouroboros from "./object.js";
  * @param {string} json
  *   The unparsed JSON:API document body parse and consume.
  *
- * @returns {Doc}
+ * @returns {Resource}
  */
 export function parse(json) {
   let doc;
@@ -24,17 +25,11 @@ export function parse(json) {
  *
  * @param {data: object} doc
  *
- * @returns {Doc}
+ * @returns {Resource}
  */
 export function consume(doc) {
   // First excludes all cases where doc is not an object with properties and then ensure doc has a "data" member.
-  if (
-    typeof doc !== "object" ||
-    doc === null ||
-    Array.isArray(doc) ||
-    !doc ||
-    !("data" in doc)
-  ) {
+  if (!isConventionalObject(doc) || !("data" in doc)) {
     throw new UsageError(
       "JSON:API documents without primary data are not supported",
     );

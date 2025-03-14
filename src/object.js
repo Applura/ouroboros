@@ -1,3 +1,13 @@
+import { UsageError } from "./errors.js";
+
+/**
+ * Container for a JSON:API document which makes it easy to read JSON:API resource object attributes.
+ *
+ * @param {data: {type: string, id: string}} obj
+ *
+ * @class
+ * @property {Resource} primary
+ */
 export default function Ouroboros(obj) {
   if ("data" in obj) {
     Object.defineProperty(this, "resources", { value: new Map() });
@@ -15,11 +25,39 @@ export default function Ouroboros(obj) {
   }
 }
 
+/**
+ * Container for a JSON:API resource object which makes it easy to read attributes and related resources.
+ *
+ * @param {type: string, id: string, ?attributes: object, ?links: object, ?meta: object, ?relationships: object} obj
+ *   A single JSON:API resource object.
+ * @param {Ouroboros} doc
+ *   The parent container for the resource object.
+ *
+ * @class
+ * @property {string} type
+ * @property {string} id
+ * @property {?object} links
+ * @property {?object} meta
+ * @property {?object} relationships
+ */
 function Resource(obj, doc) {
-  Object.defineProperty(this, "type", { value: obj.type, enumerable: true });
-  Object.defineProperty(this, "id", { value: obj.id, enumerable: true });
+  Object.defineProperty(this, "type", {
+    value: obj.type,
+    enumerable: true,
+  });
+  Object.defineProperty(this, "id", {
+    value: obj.id,
+    enumerable: true,
+  });
   if ("attributes" in obj) {
     for (const attribute in obj.attributes) {
+      if (
+        ["type", "id", "relationships", "meta", "links"].includes(attribute)
+      ) {
+        throw new UsageError(
+          `resource objects must not have an attribute member named: ${attribute}`,
+        );
+      }
       Object.defineProperty(this, attribute, {
         value: obj.attributes[attribute],
         enumerable: true,
@@ -27,35 +65,32 @@ function Resource(obj, doc) {
     }
   }
   if ("relationships" in obj) {
+    const relationships = {};
     for (const relationship in obj.relationships) {
+      if (
+        ["type", "id", "relationships", "meta", "links"].includes(relationship)
+      ) {
+        throw new UsageError(
+          `resource objects must not have a relationship member named: ${relationship}`,
+        );
+      }
+      const getRelated = Array.isArray(obj.relationships[relationship].data)
+        ? () => obj.relationships[relationship].data.map(resolveFrom(doc))
+        : () => resolveFrom(doc)(obj.relationships[relationship].data);
       Object.defineProperty(this, relationship, {
-        value: new Relationship(obj.relationships[relationship], doc),
+        get: getRelated,
+        enumerable: true,
+      });
+      const { meta, links } = obj.relationships[relationship];
+      Object.defineProperty(relationships, relationship, {
+        value: { meta, links },
         enumerable: true,
       });
     }
-  }
-  if ("links" in obj) {
-    Object.defineProperty(this, "links", {
-      value: new Links(obj.links),
-      enumerable: true,
+    Object.defineProperty(this, "relationships", {
+      value: relationships,
+      enumerable: false,
     });
-  }
-  doc.resources.set(`${obj.type}:${obj.id}`, this);
-}
-
-function Relationship(obj, doc) {
-  if ("data" in obj) {
-    if (Array.isArray(obj.data)) {
-      Object.defineProperty(this, "data", {
-        get: () => obj.data.map(resolveFrom(doc)),
-        enumerable: true,
-      });
-    } else {
-      Object.defineProperty(this, "data", {
-        get: () => resolveFrom(doc)(obj.data),
-        enumerable: true,
-      });
-    }
   }
   if ("links" in obj) {
     Object.defineProperty(this, "links", {
@@ -63,48 +98,7 @@ function Relationship(obj, doc) {
       enumerable: true,
     });
   }
-}
-
-function Links(obj) {
-  const links = [];
-  for (const key in obj) {
-    links.push(new Link(obj[key], key));
-  }
-  Object.defineProperty(this, Symbol.iterator, {
-    value: function () {
-      let i = 0;
-      return {
-        next: function () {
-          return i++ < links.length ? { value: links[i] } : { done: true };
-        },
-      };
-    },
-  });
-  Object.defineProperty(this, "get", {
-    value: function (rel) {
-      return links.find((link) => link.rel === rel);
-    },
-  });
-  Object.defineProperty(this, "getAll", {
-    value: function (rel) {
-      return links.filter((link) => link.rel === rel);
-    },
-  });
-  Object.defineProperty(this, "has", {
-    value: function (rel) {
-      return links.some((link) => link.rel === rel);
-    },
-  });
-}
-
-function Link(raw, key) {
-  const link = typeof raw === "string" ? { href: raw } : raw;
-  if ("rel" in link === false) {
-    link.rel = key;
-  }
-  for (const attr in link) {
-    Object.defineProperty(this, attr, { value: link[attr], enumerable: true });
-  }
+  doc.resources.set(`${obj.type}:${obj.id}`, this);
 }
 
 function resolveFrom(doc) {

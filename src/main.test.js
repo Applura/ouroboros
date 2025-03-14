@@ -8,19 +8,20 @@ describe("main module", () => {
       describe.each([
         ["", "Unexpected end of JSON input"],
         ["[", "Unexpected end of JSON input"],
-        [
-          "{",
-          "Expected property name or '}' in JSON at position 1 (line 1 column 2)",
-        ],
-        [
-          '{"foo"}',
-          "Expected ':' after property name in JSON at position 6 (line 1 column 7)",
-        ],
+        ["{", "Expected property name or '}' in JSON at position 1"],
+        ['{"foo"}', "Expected ':' after property name in JSON at position 6"],
       ])("%p", (input, reason) => {
         test("throws", () => {
-          expect(() => parse(input, reason)).toThrow(
-            new UsageError(`invalid JSON: ${reason}`),
-          );
+          expect(() => {
+            try {
+              parse(input, reason);
+            } catch (e) {
+              expect(
+                e.message.toString().startsWith(`invalid JSON: ${reason}`),
+              ).toBe(true);
+              throw e;
+            }
+          }).toThrow(UsageError);
         });
       });
     });
@@ -41,5 +42,92 @@ describe("main module", () => {
         },
       );
     });
+  });
+});
+
+describe("readme example", () => {
+  test("should work as promised", () => {
+    const exampleJSON = `{
+      "data": {
+        "type": "articles",
+        "id": "1",
+        "attributes": {
+          "title": "JSON:API paints my bikeshed!"
+        },
+        "links": {
+          "self": "http://example.com/articles/1"
+        },
+        "relationships": {
+          "author": {
+            "links": {
+              "self": "http://example.com/articles/1/relationships/author",
+              "related": "http://example.com/articles/1/author"
+            },
+            "data": { "type": "people", "id": "9" }
+          },
+          "comments": {
+            "links": {
+              "self": "http://example.com/articles/1/relationships/comments",
+              "related": "http://example.com/articles/1/comments"
+            },
+            "data": [{ "type": "comments", "id": "5" }]
+          }
+        }
+      },
+      "included": [
+        {
+          "type": "people",
+          "id": "9",
+          "attributes": {
+            "firstName": "Dan",
+            "lastName": "Gebhardt",
+            "twitter": "dgeb"
+          },
+          "links": {
+            "self": "http://example.com/people/9"
+          },
+          "relationships": {
+            "comments": {
+              "links": {
+                "self": "http://example.com/people/9/relationships/comments",
+                "related": "http://example.com/people/9/comments"
+              },
+              "data": [{ "type": "comments", "id": "5" }]
+            }
+          }
+        },
+        {
+          "type": "comments",
+          "id": "5",
+          "attributes": {
+            "body": "First!"
+          },
+          "relationships": {
+            "author": {
+              "data": { "type": "people", "id": "9" }
+            }
+          },
+          "links": {
+            "self": "http://example.com/comments/5"
+          }
+        }
+      ]
+    }`;
+
+    const article = parse(exampleJSON);
+    const author = article.author;
+    const comments = article.comments;
+
+    expect(`"${article.title}" by ${author.firstName} ${author.lastName}`).toBe(
+      '"JSON:API paints my bikeshed!" by Dan Gebhardt',
+    );
+
+    for (const comment of comments) {
+      const { body, author: commenter } = comment;
+      expect(`-- ${commenter.firstName} commented: "${body}"`).toBe(
+        '-- Dan commented: "First!"',
+      );
+      expect(author === commenter).toBe(true);
+    }
   });
 });

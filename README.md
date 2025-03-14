@@ -1,43 +1,46 @@
 # Ouroboros
 
-Ouroboros decouples your presentation logic from the intricacies of the JSON:API document structure by transforming a complex JSON:API document object into a simplified object with easy-to-access properties.
+Ouroboros decouples your business logic from the intricacies of the JSON:API
+specification's document structure by transforming a complex JSON:API document
+object into a simplified object with easy-to-access properties.
 
 ### TODO
 
 - [x] Refactor Deno tests into a node.js compatible test framework.
 - [x] Add a `package.json` file
 - [ ] Publish a bundled ES module
-- [ ] Elide the `data` relationship object member
-- [ ] Author a simple [JSON:API profile][profiles] restricting the use of `data`, `relationship` (singular), `links`, or `meta` as an attribute or relationship field name.
+- [x] Elide the `data` relationship object member
+- [ ] Author a simple [JSON:API profile][profiles] restricting the use of
+  `type`, `id`, `relationships`, `links`, or `meta` as an attribute or
+  relationship field name.
 - [ ] Add GitHub workflows
 - [ ] Handle documents with a primary data array
-- [ ] Refactor the way links are treated to be less unwieldy
+- [x] Refactor the way links are treated to be less unwieldy
 
 [profiles]: https://jsonapi.org/extensions/#existing-profiles
 
 ### Example
 
-For example, notice that the code below doesn't need to repetitively access the `data.attributes` property or know the difference between `attributes` and `relationships` fields—nor does is it need to search for the `people` object in the `included` array—Ouroboros does it transparently.
+For example, notice that the code below doesn't need to repetitively access the
+`data.attributes` property or know the difference between an `attributes` or
+`relationships` field—nor does is it need to search for the `people` object in
+the `included` array—Ouroboros does it transparently.
 
 ```js
-const doc = JSON.parse({/* shown below */});
-
-const article = parse(doc);
-const author = article.author.data;
-const comments = article.comments.data;
+const article = parse(/* shown below */);
+const author = article.author;
+const comments = article.comments;
 
 console.log(`"${article.title}" by ${author.firstName} ${author.lastName}`);
 
 for (const comment of comments) {
-  const {body, author: {data: commenter}} = comment;
+  const {body, author: commenter} = comment;
   console.log(`-- ${commenter.firstName} commented: "${body}"`);
 }
 
 // Prints…
 // "JSON:API paints my bikeshed!" by Dan Gebhardt
 // -- Dan commented: "First!"
-
-console.log(author === commenter); // true
 ```
 
 ```json
@@ -98,7 +101,7 @@ console.log(author === commenter); // true
       },
       "relationships": {
         "author": {
-          "data": { "type": "people", "id": "2" }
+          "data": { "type": "people", "id": "9" }
         }
       },
       "links": {
@@ -111,23 +114,23 @@ console.log(author === commenter); // true
 
 #### Why _Ouroboros_?
 
-Consuming a JSON:API document with a circular relationship causes Ouroboros to loop back on itself (without breaking).
+Consuming a JSON:API document with a circular relationship causes Ouroboros to
+loop back on itself without breaking.
 
-For example, using the example above, the following code works without a problem:
+For example, using the example above, the following code works as one would
+expect:
 
 ```js
-const doc = JSON.parse({/* shown above */});
-
-const { author } = parse(doc);
+const { author } = parse(/* shown above */);
 
 console.log(
-  author.data
-  .comments.data[0]
-  .author.data
-  .comments.data[0]
+  author
+  .comments[0]
+  .author
+  .comments[0]
   // ∞
-  .author.data
-  .comments.data[0]
+  .author
+  .comments[0]
   .body
 );
 
