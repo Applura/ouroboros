@@ -5,10 +5,11 @@
   "description": "Easily read JSON:API resource object and included object attributes",
   "module": "dist/ouroboros.js",
   "scripts": {
-    "check": "npm run lint && npm run test",
-    "test": "NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" npx jest",
-    "lint": "npx eslint src && npx prettier . --check",
-    "prettier": "npx prettier . --write"
+    "build": "npx rollup --config",
+    "check": "npm run sniff && npm run test",
+    "prettier": "npx prettier . --write",
+    "sniff": "npx eslint src && npx prettier . --check",
+    "test": "NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" npx jest"
   },
   "repository": {
     "type": "git",

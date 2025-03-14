@@ -14,7 +14,7 @@ easy-to-access properties.
 - [ ] Author a simple [JSON:API profile][profiles] restricting the use of
   `type`, `id`, `relationships`, `links`, or `meta` as an attribute or
   relationship field name.
-- [ ] Add GitHub workflows
+- [x] Add GitHub workflows
 - [ ] Handle documents with a primary data array
 - [x] Refactor the way links are treated to be less unwieldy
 

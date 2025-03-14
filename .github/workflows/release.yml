@@ -1,0 +1,28 @@
+name: release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    uses: ./.github/workflows/test.yml
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Install
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      # TODO: no-op until a package is published to NPM
