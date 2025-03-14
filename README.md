@@ -5,6 +5,10 @@ the [JSON:API specification's][spec] [document structure][structure] by
 transforming a complex JSON:API document object into a simplified object with
 easy-to-access properties.
 
+Ouroboros is **not** a JSON:API client. We recommend you use the [Fetch 
+API][fetch] or another library to make HTTP requests and Ouroboros to consume 
+the response body.
+
 ### TODO
 
 - [x] Refactor Deno tests into a node.js compatible test framework.
@@ -204,6 +208,7 @@ following names:
 - `links`
 - `base`
 
+[fetch]: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API
 [fields]: https://jsonapi.org/format/#document-resource-object-fields
 [included]: https://jsonapi.org/format/#document-compound-documents
 [relationships]: https://jsonapi.org/format/#document-resource-object-relationships
