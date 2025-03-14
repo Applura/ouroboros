@@ -1,8 +1,9 @@
 # Ouroboros
 
-Ouroboros decouples your business logic from the intricacies of the JSON:API
-specification's document structure by transforming a complex JSON:API document
-object into a simplified object with easy-to-access properties.
+Ouroboros decouples your business logic from the intricacies of
+the [JSON:API specification's][spec] [document structure][structure] by
+transforming a complex JSON:API document object into a simplified object with
+easy-to-access properties.
 
 ### TODO
 
@@ -23,8 +24,8 @@ object into a simplified object with easy-to-access properties.
 
 For example, notice that the code below doesn't need to repetitively access the
 `data.attributes` property or know the difference between an `attributes` or
-`relationships` field—nor does is it need to search for the `people` object in
-the `included` array—Ouroboros does it transparently.
+`relationships` [field][fields]—nor does is it need to search for the `people`
+object in the [`included` member][included]—Ouroboros does it transparently.
 
 ```js
 const article = parse(/* shown below */);
@@ -137,3 +138,8 @@ console.log(
 // Prints…
 // First!
 ```
+
+[spec]: https://jsonapi.org/format/
+[structure]: https://jsonapi.org/format/#document-structure
+[fields]: https://jsonapi.org/format/#document-resource-object-fields
+[included]: https://jsonapi.org/format/#document-compound-documents
