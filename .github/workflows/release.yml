@@ -1,28 +1,26 @@
-name: release
+name: Publish upon release
 
 on:
-  push:
-    branches:
-      - main
+  release:
+    types: [released]
 
 jobs:
-  test:
-    uses: ./.github/workflows/test.yml
-
-  build:
-    needs: test
+  version:
+    name: Get version ID
     runs-on: ubuntu-latest
+    outputs:
+      version-id: ${{ steps.get-version-id.outputs.version_id }}
     steps:
-      - uses: actions/checkout@v4
+      - name: Get version ID
+        id: get-version-id
+        run: |
+          node -e 'process.env.GITHUB_REF.startsWith("refs/tags/v") || process.exit(1)'
+          echo "version_id=$(node -e 'console.log(process.env.GITHUB_REF.substring("refs/tags/v".length));')" >> "$GITHUB_OUTPUT"
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: lts/*
-
-      - name: Install
-        run: npm ci
-
-      - name: Build
-        run: npm run build
-
-      # TODO: no-op until a package is published to NPM
+  publish:
+    name: Publish
+    needs: version
+    uses: ./.github/workflows/publish.yml
+    secrets: inherit
+    with:
+      version-id: ${{ needs.version.outputs.version-id }}

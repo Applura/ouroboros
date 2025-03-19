@@ -1,6 +1,5 @@
 {
   "name": "@applura/ouroboros",
-  "version": "0.0.0",
   "type": "module",
   "description": "Easily read JSON:API resource object and included object attributes",
   "module": "dist/ouroboros.js",
