@@ -16,7 +16,7 @@ the response body.
 - [ ] Publish a bundled ES module
 - [x] Elide the `data` relationship object member
 - [ ] Author a simple [JSON:API profile][profiles] restricting the use of
-  `type`, `id`, `relationships`, `links`, `meta`, or `base` as an attribute or
+  `type`, `id`, `relationships`, `links`, `meta`, or `top` as an attribute or
   relationship field name.
 - [x] Add GitHub workflows
 - [ ] Handle documents with a primary data array
@@ -179,7 +179,7 @@ console.log(
 All `links` and `meta` members in the document are preserved.
 
 To access `links` or `meta` object members from the
-original [top-level object][top-level], use the `base` property.
+original [top-level object][top-level], use the `top` property.
 
 To access `links` or `meta` object members from one of the original
 [relationship objects][relationships], use the `relationships` property on the
@@ -193,14 +193,14 @@ const { author } = article;
 console.log(article.links.describedby); // "http://example.com/schemas/article-resource"
 console.log(article.meta.description); // "A single article."
 
-// To access a top-level links or meta member, use the "base" property on any
+// To access a top-level links or meta member, use the "top" property on any
 // resource.
-console.log(article.base.links.describedby); // "http://example.com/schemas/article-document"
-console.log(article.base.meta.description); // "Document containing a single article and its related resources."
+console.log(article.top.links.describedby); // "http://example.com/schemas/article-document"
+console.log(article.top.meta.description); // "Document containing a single article and its related resources."
 
-// Article and author share the same "base" property.
-console.log(article.base.links.describedby === author.base.links.describedby); // true.
-console.log(article.base.meta.description === author.base.meta.description); // true.
+// Article and author share the same "top" property.
+console.log(article.top.links.describedby === author.top.links.describedby); // true.
+console.log(article.top.meta.description === author.top.meta.description); // true.
 
 // To access a links or meta member on a relationship, use the "relationships"
 // property on the parent resource object *not* the related resource object. In
@@ -218,7 +218,7 @@ following names:
 - `relationships`
 - `meta`
 - `links`
-- `base`
+- `top`
 
 [serpent]: https://en.m.wikipedia.org/wiki/Ouroboros
 [fetch]: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API

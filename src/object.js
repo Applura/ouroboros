@@ -1,6 +1,6 @@
 import { UsageError } from "./errors.js";
 
-const reservedNames = ["type", "id", "relationships", "meta", "links", "base"];
+const reservedNames = ["type", "id", "relationships", "meta", "links", "top"];
 /**
  * Container for a JSON:API document which makes it easy to read JSON:API resource object attributes.
  *
@@ -116,21 +116,21 @@ function Resource(obj, doc) {
     });
   }
   if ("links" in doc || "meta" in doc) {
-    const base = {};
+    const top = {};
     if ("links" in doc) {
-      Object.defineProperty(base, "links", {
+      Object.defineProperty(top, "links", {
         get: () => doc.links,
         enumerable: true,
       });
     }
     if ("meta" in doc) {
-      Object.defineProperty(base, "meta", {
+      Object.defineProperty(top, "meta", {
         get: () => doc.meta,
         enumerable: true,
       });
     }
-    Object.defineProperty(this, "base", {
-      value: base,
+    Object.defineProperty(this, "top", {
+      value: top,
       enumerable: true,
     });
   }

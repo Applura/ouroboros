@@ -275,18 +275,16 @@ describe("Ouroboros object", () => {
     expect(item.meta.description).toBe(
       "This is a resource object representing an item.",
     );
-    expect(item.base.links.self.href).toBe("https://example.com/items/1");
-    expect(item.base.meta.description).toBe(
+    expect(item.top.links.self.href).toBe("https://example.com/items/1");
+    expect(item.top.meta.description).toBe(
       "This is a top-level document object.",
     );
     expect(item.author.links.self.href).toBe("/people/1");
     expect(item.author.meta.description).toBe(
       "This is a resource object representing a person.",
     );
-    expect(item.author.base.links.self.href).toBe(
-      "https://example.com/items/1",
-    );
-    expect(item.author.base.meta.description).toBe(
+    expect(item.author.top.links.self.href).toBe("https://example.com/items/1");
+    expect(item.author.top.meta.description).toBe(
       "This is a top-level document object.",
     );
     expect(item.relationships.author.links.related).toBe("/items/1/author");
