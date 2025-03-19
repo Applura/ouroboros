@@ -9,19 +9,6 @@ Ouroboros is **not** a JSON:API client. We recommend you use the [Fetch
 API][fetch] or another library to make HTTP requests and Ouroboros to consume 
 the response body.
 
-### TODO
-
-- [x] Refactor Deno tests into a node.js compatible test framework.
-- [x] Add a `package.json` file
-- [ ] Publish a bundled ES module
-- [x] Elide the `data` relationship object member
-- [ ] Author a simple [JSON:API profile][profiles] restricting the use of
-  `type`, `id`, `relationships`, `links`, `meta`, or `top` as an attribute or
-  relationship field name.
-- [x] Add GitHub workflows
-- [ ] Handle documents with a primary data array
-- [x] Refactor the way links are treated to be less unwieldy
-
 [profiles]: https://jsonapi.org/extensions/#existing-profiles
 
 ### API
