@@ -2,6 +2,7 @@
   "name": "@applura/ouroboros",
   "type": "module",
   "description": "Easily read JSON:API resource object and included object attributes",
+  "main": "dist/ouroboros.js",
   "module": "dist/ouroboros.js",
   "scripts": {
     "build": "npx rollup --config",
