@@ -1,4 +1,4 @@
-# Ouroboros
+# ∞ ouroboros ∞
 
 Ouroboros decouples your business logic from the intricacies of
 the [JSON:API specification's][spec] [document structure][structure] by
